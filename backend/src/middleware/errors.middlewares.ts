@@ -1,4 +1,4 @@
-import { Response, Request } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import { MongoError } from 'mongodb';
 import CustomErrorAPI from '../handlers/error.handler';
 import { StatusCodes } from 'http-status-codes';
@@ -14,7 +14,9 @@ const errorMiddleware = (
   err: CustomErrorAPI,
   req: Request,
   res: Response,
+  next: NextFunction,
 ) => {
+  console.log('Er2 trigger', err);
   err.message = err.message || 'Internal Server Error';
   err.statusCode =
     err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR;
@@ -30,10 +32,7 @@ const errorMiddleware = (
       err.statusCode = StatusCodes.BAD_REQUEST;
     }
   }
-
-  console.log('errpr', err);
-
-  return res.status(err.statusCode).json({
+  return res.status(err.statusCode).send({
     msg: err.message,
     status: 'failed',
     stack:

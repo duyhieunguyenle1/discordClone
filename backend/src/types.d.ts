@@ -2,8 +2,8 @@ import { PayloadType } from './utils/jwt';
 
 declare global {
   namespace Express {
-    export interface Request {
+    export type Request = {
       user: PayloadType;
-    }
+    };
   }
 }

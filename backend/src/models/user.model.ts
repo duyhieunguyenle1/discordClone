@@ -1,8 +1,4 @@
-import mongoose, {
-  Schema,
-  Model,
-  Mongoose,
-} from 'mongoose';
+import mongoose, { Schema, Model } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 import { IUser, IUserMethods } from '../types/user.types';
