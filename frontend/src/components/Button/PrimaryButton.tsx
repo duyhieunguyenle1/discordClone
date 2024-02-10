@@ -9,13 +9,7 @@ interface PrimaryButtonProps {
   onClick?: () => void;
 }
 
-const PrimaryButton = ({
-  classNames,
-  label,
-  type,
-  disabled,
-  onClick,
-}: PrimaryButtonProps) => {
+const PrimaryButton = ({ classNames, label, type, disabled, onClick }: PrimaryButtonProps) => {
   return (
     <Button
       variant="contained"

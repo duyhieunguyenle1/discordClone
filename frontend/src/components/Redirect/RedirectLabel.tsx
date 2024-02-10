@@ -15,23 +15,11 @@ const RedirectText = styled('a')({
   textDecoration: 'none',
 });
 
-const RedirectLabel = ({
-  label,
-  classNames,
-  redirectRoute,
-  redirectText,
-}: RedirectLabelProps) => {
+const RedirectLabel = ({ label, classNames, redirectRoute, redirectText }: RedirectLabelProps) => {
   return (
-    <Typography
-      sx={{ color: '#72767d' }}
-      style={classNames}
-      variant="subtitle2"
-    >
+    <Typography sx={{ color: '#72767d' }} style={classNames} variant="subtitle2">
       {label}
-      <RedirectText
-        href={redirectRoute}
-        style={{ marginLeft: '.25rem' }}
-      >
+      <RedirectText href={redirectRoute} style={{ marginLeft: '.25rem' }}>
         {redirectText}
       </RedirectText>
     </Typography>

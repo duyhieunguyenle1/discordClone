@@ -3,15 +3,8 @@ import { StatusCodes } from 'http-status-codes';
 
 import { NextFunction, Request, Response } from 'express';
 
-const Validator = (
-  validator: Joi.ObjectSchema,
-  useJoiError = true,
-) => {
-  return (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
+const Validator = (validator: Joi.ObjectSchema, useJoiError = true) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     const { error, value } = validator.validate(req.body);
 
     if (error) {
@@ -28,11 +21,7 @@ const Validator = (
       };
 
       return res
-        .status(
-          useJoiError
-            ? StatusCodes.FORBIDDEN
-            : StatusCodes.BAD_GATEWAY,
-        )
+        .status(useJoiError ? StatusCodes.FORBIDDEN : StatusCodes.BAD_GATEWAY)
         .json(useJoiError ? joiError : customError);
     }
 

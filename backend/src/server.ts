@@ -1,14 +1,15 @@
-import http from 'http';
+import { createServer } from 'http';
 import dotenv from 'dotenv';
 
+import { registerSocketServer } from './socketServer';
 import app from './app';
 import connectDB from './config/connectDB';
 dotenv.config();
 
-const PORT =
-  process.env.PORT || process.env.API_PORT || 5001;
+const PORT = process.env.PORT || process.env.API_PORT || 5001;
 
-const server = http.createServer(app);
+const server = createServer(app);
+registerSocketServer(server);
 
 process.on('uncaughtException', err => {
   console.log(`ERROR: ${err.message}`);

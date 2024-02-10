@@ -10,11 +10,7 @@ const BoxWrapper = styled('div')({
   background: '#5865F2',
 });
 
-const AuthBox = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+const AuthBox = ({ children }: { children: React.ReactNode }) => {
   return (
     <BoxWrapper>
       <Box

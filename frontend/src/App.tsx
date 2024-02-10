@@ -6,12 +6,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
-    <Providers>
-      <BrowserRouter>
+    <BrowserRouter>
+      <Providers>
         <Routes />
         <ToastContainer />
-      </BrowserRouter>
-    </Providers>
+      </Providers>
+    </BrowserRouter>
   );
 }
 

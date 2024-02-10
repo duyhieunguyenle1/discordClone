@@ -6,11 +6,7 @@ type PayloadType = {
   username: string;
 };
 
-const createPayload = ({
-  email,
-  user_id,
-  username,
-}: PayloadType) => {
+const createPayload = ({ email, user_id, username }: PayloadType) => {
   return {
     email,
     user_id,
@@ -18,44 +14,40 @@ const createPayload = ({
   };
 };
 
-const createAccessToken = (
-  payload: PayloadType,
-  expiresIn: string,
-) => {
-  return jwt.sign(
-    payload,
-    process.env.ACCESS_SECRET_TOKEN as string,
-    {
-      expiresIn: expiresIn,
-    },
-  );
+const createAccessToken = (payload: PayloadType, expiresIn: string) => {
+  return jwt.sign(payload, process.env.ACCESS_SECRET_TOKEN as string, {
+    expiresIn: expiresIn,
+  });
 };
 
 const verifyAccessToken = (token: string) => {
-  return jwt.verify(
-    token,
-    process.env.ACCESS_SECRET_TOKEN as string,
-  ) as PayloadType;
+  return jwt.verify(token, process.env.ACCESS_SECRET_TOKEN as string) as PayloadType;
 };
 
-const createRefreshToken = (
-  payload: PayloadType,
-  expiresIn: string,
-) => {
-  return jwt.sign(
-    payload,
-    process.env.REFRESH_SECRET_TOKEN as string,
-    {
-      expiresIn: expiresIn,
-    },
-  );
+const createRefreshToken = (payload: PayloadType, expiresIn: string) => {
+  return jwt.sign(payload, process.env.REFRESH_SECRET_TOKEN as string, {
+    expiresIn: expiresIn,
+  });
 };
 
 const verifyRefreshToken = (token: string) => {
-  return jwt.verify(
-    token,
-    process.env.REFRESH_SECRET_TOKEN as string,
-  ) as PayloadType;
+  try {
+    return jwt.verify(token, process.env.REFRESH_SECRET_TOKEN as string) as PayloadType;
+  } catch (error) {
+    return null;
+  }
+};
+
+const isTokenExpired = (token: string): boolean => {
+  try {
+    const { exp } = jwt.decode(token) as {
+      exp: number;
+    };
+    const expirationDateTimeInSeconds = exp * 1000;
+    return Date.now() >= expirationDateTimeInSeconds;
+  } catch {
+    return true;
+  }
 };
 
 export {
@@ -64,5 +56,6 @@ export {
   createRefreshToken,
   verifyRefreshToken,
   verifyAccessToken,
+  isTokenExpired,
   PayloadType,
 };

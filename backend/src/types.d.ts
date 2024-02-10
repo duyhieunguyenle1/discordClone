@@ -1,3 +1,4 @@
+import { Socket } from 'socket.io';
 import { PayloadType } from './utils/jwt';
 
 declare global {
@@ -5,5 +6,11 @@ declare global {
     export interface Request {
       user: PayloadType;
     }
+  }
+}
+
+declare module 'socket.io' {
+  export interface Socket {
+    user: PayloadType;
   }
 }

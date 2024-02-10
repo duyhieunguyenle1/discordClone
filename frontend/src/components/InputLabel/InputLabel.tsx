@@ -1,9 +1,5 @@
 import { styled } from '@mui/system';
-import {
-  FieldErrors,
-  FieldValues,
-  UseFormRegister,
-} from 'react-hook-form';
+import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
 
 const Wrapper = styled('div')({
   display: 'flex',
@@ -67,9 +63,7 @@ const InputLabel = ({
           {...register(id, {
             required: {
               value: true,
-              message: `${
-                id.charAt(0).toUpperCase() + id.slice(1)
-              } field is required!`,
+              message: `${id.charAt(0).toUpperCase() + id.slice(1)} field is required!`,
             },
             pattern: {
               value: pattern!,
