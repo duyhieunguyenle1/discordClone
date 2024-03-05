@@ -28,6 +28,10 @@ const UserSchema: Schema = new mongoose.Schema<IUser, UserModel, IUserMethods>(
       type: String,
     },
     friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    verified: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );

@@ -13,7 +13,7 @@ app.use(
   cors({
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'https://spdx.org/licenses'],
   }),
 );
 app.use(cookieParser());

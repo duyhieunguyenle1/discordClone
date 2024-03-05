@@ -1,9 +1,16 @@
 import { Navigate } from 'react-router-dom';
-import { PATH_HOME, PATH_HOME_LOGIN, PATH_HOME_REGISTER } from './router.path';
-import { Suspense } from 'react';
+import {
+  PATH_CHAT,
+  PATH_HOME,
+  PATH_HOME_LOGIN,
+  PATH_HOME_REGISTER,
+  PATH_HOME_VERIFY_EMAIL,
+} from './router.path';
+import { Suspense, lazy } from 'react';
 import LoadingPage from '../components/Loading/LoadingPage';
-import SharedLayout from '../pages/sharedLayout/SharedLayout';
-import Dashboard from '../pages/dashboard/Dashboard';
+import { ChatPage, DashboardPage } from '../pages';
+
+const SharedLayout = lazy(() => import('../pages/sharedLayout/SharedLayout'));
 
 interface routeType {
   path: string;
@@ -27,13 +34,13 @@ export const protectedRoutes: fullRouteType[] = [
     children: [
       {
         path: '',
-        element: <Dashboard />,
+        element: <DashboardPage />,
         title: 'Home',
       },
       {
-        path: '',
-        element: <></>,
-        title: 'Blog',
+        path: PATH_CHAT,
+        element: <ChatPage />,
+        title: 'Chat Details',
       },
       {
         path: '',
@@ -44,6 +51,11 @@ export const protectedRoutes: fullRouteType[] = [
   },
   {
     path: PATH_HOME_LOGIN,
+    element: <Navigate to={PATH_HOME} />, //redirect to home page if already login
+    title: 'Redirect to home',
+  },
+  {
+    path: PATH_HOME_VERIFY_EMAIL,
     element: <Navigate to={PATH_HOME} />, //redirect to home page if already login
     title: 'Redirect to home',
   },

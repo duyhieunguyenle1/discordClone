@@ -3,6 +3,8 @@ import { Socket, Server as SocketServer } from 'socket.io';
 import { verifySocketToken } from './middleware/socket.middlewares';
 import { disconnectHandler, newConnection } from './handlers/socket/connect.handler';
 import { getOnlineUser, setSocketServerInstance } from './handlers/socket/serverStore';
+import { directChatHistoryHandler, directMessageHandler } from './handlers/socket/message.handler';
+import { ContentSocket } from './types/message.types';
 
 const registerSocketServer = (server: Server) => {
   const io = new SocketServer(server, {
@@ -31,6 +33,14 @@ const registerSocketServer = (server: Server) => {
     newConnection(socket, io);
     emitOnlineUsers();
 
+    socket.on('direct-message', (data: ContentSocket) => {
+      directMessageHandler(socket, data);
+    });
+
+    socket.on('direct-chat-history', (data: { receiverId: string }) => {
+      directChatHistoryHandler(socket, data);
+    });
+
     socket.on('disconnect', () => {
       disconnectHandler(socket);
     });
@@ -38,7 +48,7 @@ const registerSocketServer = (server: Server) => {
 
   setInterval(() => {
     emitOnlineUsers();
-  }, 1000 * 20);
+  }, 1000 * 30);
 };
 
 export { registerSocketServer };

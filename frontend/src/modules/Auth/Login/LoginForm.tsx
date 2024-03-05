@@ -7,6 +7,9 @@ import authApi from '../../../services/auth.services';
 import handleAxiosError from '../../../utils/handleAxiosError';
 import storage from '../../../utils/storage';
 import { useNavigate } from 'react-router-dom';
+import { isAxiosError } from 'axios';
+import { PATH_HOME_VERIFY_EMAIL } from '../../../routes/router.path';
+import { toast } from 'react-toastify';
 
 const LoginForm = () => {
   const regExpEmail = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/g);
@@ -33,7 +36,22 @@ const LoginForm = () => {
           navigate(0);
         }
       })
-      .catch(err => handleAxiosError(err));
+      .catch(err => {
+        if (isAxiosError(err)) {
+          if (err.response?.status === 406) {
+            navigate(`${PATH_HOME_VERIFY_EMAIL}?e=${data?.email}`);
+            authApi
+              .sendOtp('', data.email)
+              .then(res => {
+                if (res.status === 200) {
+                  toast.error('Please confirm your email to continue');
+                }
+              })
+              .catch(err2 => handleAxiosError(err2));
+          }
+        }
+        handleAxiosError(err);
+      });
   };
 
   useEffect(() => {

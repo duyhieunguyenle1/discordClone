@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IFriend, IFriendInvitation } from '../../types/friend.types';
+import { IFriend, IFriendInvitation, IOnlineUser } from '../../types/friend.types';
 
 export interface friendInvitationState {
   friends: IFriend[];
-  onlineUser: [];
+  onlineUser: IOnlineUser[];
   pendingFriendInvitations: IFriendInvitation[];
 }
 
@@ -24,7 +24,6 @@ export const friendInvitationSlice = createSlice({
       if (!isContain && action.payload) {
         state.pendingFriendInvitations.push(action.payload);
       }
-      return state;
     },
     rejectInvitationPending: (state, action: PayloadAction<string>) => {
       const isContain = state.pendingFriendInvitations.find(item => item._id === action.payload);
@@ -34,7 +33,6 @@ export const friendInvitationSlice = createSlice({
           item => item._id !== action.payload,
         );
       }
-      return state;
     },
     setFriend: (state, action: PayloadAction<IFriend>) => {
       const isContain = state.friends.find(
@@ -43,14 +41,16 @@ export const friendInvitationSlice = createSlice({
       if (!isContain && action.payload) {
         state.friends = [...state.friends, action.payload];
       }
-      return state;
     },
-    setOnlineFriends: (state, action: PayloadAction<any>) => {
-      state.onlineUser = action.payload.onlineUser;
+    setOnlineFriend: (state, action: PayloadAction<IOnlineUser>) => {
+      const isContain = state.onlineUser.find(item => item.userId === action.payload.userId);
+      if (!isContain && action.payload) {
+        state.onlineUser.push(action.payload);
+      }
     },
   },
 });
 
-export const { setInvitationPending, setFriend, setOnlineFriends, rejectInvitationPending } =
+export const { setInvitationPending, setFriend, setOnlineFriend, rejectInvitationPending } =
   friendInvitationSlice.actions;
 export default friendInvitationSlice.reducer;

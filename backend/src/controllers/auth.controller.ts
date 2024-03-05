@@ -26,32 +26,7 @@ const registerUser = async (req: Request, res: Response) => {
     password,
   });
 
-  const payloadJWT = createPayload({
-    email,
-    user_id: user._id,
-    username,
-  });
-  const accessToken = createAccessToken(payloadJWT, process.env.ACCESS_EXPIRES_TIME || '1h');
-  const refreshToken = createRefreshToken(payloadJWT, process.env.REFRESH_EXPIRES_TIME || '1d');
-
-  const options = {
-    expires: new Date(
-      Date.now() + (parseInt(process.env.COOKIE_EXPIRES_TIME!) || 1) * 24 * 3600 * 1000,
-    ),
-    httpOnly: true,
-    secure: true,
-  };
-
-  res.cookie('userId', user._id, {
-    expires: new Date(
-      Date.now() + (parseInt(process.env.COOKIE_EXPIRES_TIME!) || 1) * 24 * 3600 * 1000,
-    ),
-  });
-
-  return res
-    .status(StatusCodes.CREATED)
-    .cookie('refreshToken', refreshToken, options)
-    .json({ user, accessToken });
+  return res.status(StatusCodes.CREATED).json({ user });
 };
 
 const loginUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -70,8 +45,11 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     return next(createHttpError.Unauthorized('Wrong password!'));
   }
 
+  if (!user.verified) {
+    return next(createHttpError.NotAcceptable('Please verify your email before continue'));
+  }
+
   const payloadJWT = createPayload({
-    username: user.username,
     user_id: user._id,
     email: user.email,
   });
@@ -123,8 +101,17 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction) => 
 
   let payloadJWT;
   if (userId) {
+    const user = await User.findOne({ email: userId.email });
+
+    if (!user) {
+      return next(createHttpError.NotFound('User not found'));
+    }
+
+    if (!user.verified) {
+      return next(createHttpError.NotAcceptable('Please verify your email before continue'));
+    }
+
     payloadJWT = createPayload({
-      username: userId!.username,
       user_id: userId!.user_id,
       email: userId!.email,
     });
@@ -164,6 +151,16 @@ const checkRefreshToken = async (req: Request, res: Response, next: NextFunction
   const userId = verifyRefreshToken(refreshToken);
   if (!userId) {
     throw new createHttpError.Forbidden('Try login again to continue');
+  }
+
+  const user = await User.findOne({ email: userId.email });
+
+  if (!user) {
+    return next(createHttpError.NotFound('User not found'));
+  }
+
+  if (!user.verified) {
+    return next(createHttpError.NotAcceptable('Please verify your email before continue'));
   }
 
   if (isTokenExpired(refreshToken)) {

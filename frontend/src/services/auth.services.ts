@@ -8,6 +8,10 @@ const authApi = {
   isAuthen: async () => await axiosPublic.get('/isAuthenticated'),
   refreshToken: async () => await axiosPublic.post('/refresh-token'),
   logout: async () => await axiosProtected.post('/auth/logout'),
+  sendOtp: async (emailQuery: string, email: string) =>
+    await axiosPublic.post(`/send-otp?e=${emailQuery}`, { email }),
+  verifyOtp: async (otp: string, email: string) =>
+    await axiosPublic.post(`/verify-otp?e=${email}`, { otp }),
 };
 
 export default authApi;

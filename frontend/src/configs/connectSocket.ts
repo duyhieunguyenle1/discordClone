@@ -1,15 +1,22 @@
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import storage from '../utils/storage';
 import { isTokenExpired, newAccessToken } from '../utils/token';
-import { sendFriendInvitation, setFriends } from '../stores/friendInvitation/friendInvitationThunk';
+import {
+  sendFriendInvitation,
+  setFriends,
+  setOnlineFriends,
+} from '../stores/friendInvitation/friendInvitationThunk';
 import { FieldValues } from 'react-hook-form';
 import { Dispatch, ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 import { IFriend } from '../types/friend.types';
-import { setOnlineFriends } from '../stores/friendInvitation/friendInvitationSlices';
+import { ChatSchemaProps, ContentSocket } from '../types/message.types';
+import { setDetailMessage } from '../stores/messages/messagesThunk';
 
 const socketPort = import.meta.env.VITE_DOMAIN_SOCKET;
 
 type dispatchProps = Dispatch<UnknownAction> & ThunkDispatch<any, undefined, UnknownAction>;
+
+let socket: Socket;
 
 export const connectSocket = async (dispatch: dispatchProps) => {
   let token = storage.getAccessToken();
@@ -18,7 +25,7 @@ export const connectSocket = async (dispatch: dispatchProps) => {
     token = await newAccessToken();
   }
 
-  const socket = io(socketPort, {
+  socket = io(socketPort, {
     auth: {
       token: token,
     },
@@ -45,7 +52,21 @@ export const connectSocket = async (dispatch: dispatchProps) => {
     dispatch(setOnlineFriends(onlineUsers));
   });
 
+  socket.on('direct-chat-history', (data: ChatSchemaProps) => {
+    dispatch(setDetailMessage(data));
+  });
+
   socket.on('connect_error', (err: any) => {
     console.warn(err);
   });
+};
+
+export const sendDirectMessage = (data: ContentSocket) => {
+  socket.emit('direct-message', data);
+};
+
+export const getDirectChatHistory = (data: { receiverId: string }) => {
+  if (data.receiverId) {
+    socket.emit('direct-chat-history', data);
+  }
 };

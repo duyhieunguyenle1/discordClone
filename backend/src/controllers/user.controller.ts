@@ -35,4 +35,20 @@ const getCurrentUser = async (req: Request, res: Response, next: NextFunction) =
   return res.status(StatusCodes.OK).json({ user });
 };
 
-export { getAllUsers, getCurrentUser };
+const getUserById = async (req: Request, res: Response, next: NextFunction) => {
+  const userId = req.params.id;
+
+  if (!userId) {
+    return next(createHttpError[404]('UserId not acceptable'));
+  }
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return next(createHttpError.NotFound('Not found any user'));
+  }
+
+  return res.status(StatusCodes.OK).json({ user });
+};
+
+export { getAllUsers, getCurrentUser, getUserById };

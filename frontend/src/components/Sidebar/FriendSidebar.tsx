@@ -17,7 +17,7 @@ import { sendFriendInvitation } from '../../stores/friendInvitation/friendInvita
 import { toast } from 'react-toastify';
 
 const MainContainer = styled('div')({
-  width: '224px',
+  minWidth: '224px',
   height: '100%',
   display: 'flex',
   flexDirection: 'column',

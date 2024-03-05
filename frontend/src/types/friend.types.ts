@@ -13,10 +13,14 @@ interface IFriendInvitation {
 }
 
 interface IFriend {
-  _id: string;
-  isOnline: boolean;
+  id: string;
   username: string;
   img?: string;
 }
 
-export type { IFriendInvitation, IFriend };
+interface IOnlineUser {
+  socketId: string;
+  userId: string;
+}
+
+export type { IFriendInvitation, IFriend, IOnlineUser };

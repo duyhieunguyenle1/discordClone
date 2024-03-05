@@ -3,14 +3,12 @@ import jwt from 'jsonwebtoken';
 type PayloadType = {
   email: string;
   user_id: string;
-  username: string;
 };
 
-const createPayload = ({ email, user_id, username }: PayloadType) => {
+const createPayload = ({ email, user_id }: PayloadType) => {
   return {
     email,
     user_id,
-    username,
   };
 };
 

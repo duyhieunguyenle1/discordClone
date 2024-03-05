@@ -15,4 +15,8 @@ const refreshTokenSchema = Joi.object({
   refreshToken: Joi.string(),
 });
 
-export { loginSchema, registerSchema, refreshTokenSchema };
+const otpVerifySchema = Joi.object({
+  otp: Joi.string().min(6).required(),
+});
+
+export { loginSchema, registerSchema, refreshTokenSchema, otpVerifySchema };

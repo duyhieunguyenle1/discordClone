@@ -1,5 +1,5 @@
 import { MoreVert } from '@mui/icons-material';
-import { IconButton, styled } from '@mui/material';
+import { IconButton, Typography, styled } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { MouseEvent, useState } from 'react';
@@ -17,11 +17,11 @@ const MainContainer = styled('div')({
   width: 'calc(100% - 296px)',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'right',
+  justifyContent: 'space-between',
   padding: '0 15px',
 });
 
-const Header = () => {
+const Header = ({ label }: { label: string }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ const Header = () => {
     authApi.logout().then(res => {
       if (res.status === 200) {
         storage.clearAccessToken();
-        storage.clearUserLocal();
+        storage.clearUserId();
         navigate(0);
       }
     });
@@ -42,6 +42,18 @@ const Header = () => {
 
   return (
     <MainContainer>
+      <Typography
+        sx={{
+          fontSize: '16px',
+          color: 'white',
+          fontWeight: 'bold',
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {`Conversation: ${label}`}
+      </Typography>
       <IconButton onClick={handleClick} style={{ color: 'white' }}>
         <MoreVert />
       </IconButton>

@@ -3,7 +3,7 @@ import FriendSidebar from './FriendSidebar';
 import GroupsIcon from '@mui/icons-material/Groups';
 
 const MainContainer = styled('div')({
-  width: '72px',
+  minWidth: '72px',
   height: '100%',
   display: 'flex',
   flexDirection: 'column',

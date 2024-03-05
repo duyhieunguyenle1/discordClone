@@ -25,14 +25,8 @@ const FriendList = () => {
       <MainContainer>
         {friends &&
           friends.length > 0 &&
-          friends.map((item, index) => (
-            <FriendListItem
-              username={item.username}
-              id={item._id}
-              key={index}
-              isOnline={item.isOnline}
-              img={item.img}
-            />
+          friends.map(item => (
+            <FriendListItem username={item.username} id={item.id} key={item.id} img={item.img} />
           ))}
       </MainContainer>
     </>

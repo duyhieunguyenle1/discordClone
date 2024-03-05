@@ -5,8 +5,9 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import PrimaryButton from '../../../components/Button/PrimaryButton';
 import authApi from '../../../services/auth.services';
 import handleAxiosError from '../../../utils/handleAxiosError';
-import storage from '../../../utils/storage';
 import { useNavigate } from 'react-router-dom';
+import { PATH_HOME_VERIFY_EMAIL } from '../../../routes/router.path';
+import { toast } from 'react-toastify';
 
 const RegisterForm = () => {
   const regExpEmail = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/g);
@@ -30,8 +31,8 @@ const RegisterForm = () => {
       .register(data)
       .then(res => {
         if (res.status === 201) {
-          storage.setAccessToken(res.data.accessToken);
-          navigate(0);
+          toast.warn('Verify email to continue');
+          navigate(`${PATH_HOME_VERIFY_EMAIL}?e=${data?.email}`);
         }
       })
       .catch(err => handleAxiosError(err));

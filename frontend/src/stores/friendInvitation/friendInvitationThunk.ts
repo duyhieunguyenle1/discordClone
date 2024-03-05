@@ -2,8 +2,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { FieldValues } from 'react-hook-form';
 import friendApi from '../../services/friend.services';
 import handleAxiosError from '../../utils/handleAxiosError';
-import { rejectInvitationPending, setFriend, setInvitationPending } from './friendInvitationSlices';
-import { IFriend } from '../../types/friend.types';
+import {
+  rejectInvitationPending,
+  setFriend,
+  setInvitationPending,
+  setOnlineFriend,
+} from './friendInvitationSlices';
+import { IFriend, IOnlineUser } from '../../types/friend.types';
 
 const setFriends = createAsyncThunk('friends/setFriends', async (data: IFriend, { dispatch }) => {
   try {
@@ -15,12 +20,20 @@ const setFriends = createAsyncThunk('friends/setFriends', async (data: IFriend, 
   }
 });
 
-const setOnlineFriends = createAsyncThunk('friend/setOnlineFriends', async (data, { dispatch }) => {
-  try {
-  } catch (error) {
-    return handleAxiosError(error);
-  }
-});
+const setOnlineFriends = createAsyncThunk(
+  'friend/setOnlineFriends',
+  async (data: IOnlineUser[], { dispatch }) => {
+    try {
+      if (data) {
+        data.forEach(item => {
+          dispatch(setOnlineFriend(item));
+        });
+      }
+    } catch (error) {
+      return handleAxiosError(error);
+    }
+  },
+);
 
 const sendFriendInvitation = createAsyncThunk(
   'invitation/setInvitationPending',
