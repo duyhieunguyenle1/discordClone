@@ -1,10 +1,13 @@
-import { Typography } from '@mui/material';
 import { KeyboardEvent, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Typography } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
 import authApi from '../../../../services/auth.services';
 import handleAxiosError from '../../../../utils/handleAxiosError';
-import { toast } from 'react-toastify';
 import storage from '../../../../utils/storage';
+import { PATH_HOME_LOGIN } from '../../../../routes/router.path';
 
 const VerifyEmailForm = () => {
   const [searchParams] = useSearchParams('');
@@ -68,7 +71,13 @@ const VerifyEmailForm = () => {
   };
 
   return (
-    <form>
+    <form className="relative">
+      <Link className="absolute" to={PATH_HOME_LOGIN}>
+        <ArrowBackIcon
+          style={{ color: 'white' }}
+          className="transition-all duration-500 hover:opacity-70"
+        />
+      </Link>
       <Typography
         variant="h4"
         sx={{

@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react';
 import authApi from '../../../services/auth.services';
 import handleAxiosError from '../../../utils/handleAxiosError';
 import storage from '../../../utils/storage';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { isAxiosError } from 'axios';
-import { PATH_HOME_VERIFY_EMAIL } from '../../../routes/router.path';
+import { PATH_HOME_FORGOT_PASSWORD, PATH_HOME_VERIFY_EMAIL } from '../../../routes/router.path';
 import { toast } from 'react-toastify';
 
 const LoginForm = () => {
@@ -83,6 +83,11 @@ const LoginForm = () => {
         register={register}
         minLength={6}
       />
+      <div className="mt-1">
+        <Link to={PATH_HOME_FORGOT_PASSWORD} className="text-blue-500 underline text-sm">
+          Forgot password
+        </Link>
+      </div>
       <Tooltip
         title={!isSubmitting ? 'Press to login' : 'Please enter correct email and password!'}
       >
@@ -91,7 +96,7 @@ const LoginForm = () => {
             type="submit"
             label="Submit"
             disabled={isSubmitting}
-            classNames={{ marginTop: '30px' }}
+            classNames={{ marginTop: '18px' }}
           />
         </div>
       </Tooltip>

@@ -5,8 +5,8 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import PrimaryButton from '../../../components/Button/PrimaryButton';
 import authApi from '../../../services/auth.services';
 import handleAxiosError from '../../../utils/handleAxiosError';
-import { useNavigate } from 'react-router-dom';
-import { PATH_HOME_VERIFY_EMAIL } from '../../../routes/router.path';
+import { Link, useNavigate } from 'react-router-dom';
+import { PATH_HOME_FORGOT_PASSWORD, PATH_HOME_VERIFY_EMAIL } from '../../../routes/router.path';
 import { toast } from 'react-toastify';
 
 const RegisterForm = () => {
@@ -33,6 +33,13 @@ const RegisterForm = () => {
         if (res.status === 201) {
           toast.warn('Verify email to continue');
           navigate(`${PATH_HOME_VERIFY_EMAIL}?e=${data?.email}`);
+          authApi
+            .sendOtp('', data.email)
+            .then(res => {
+              if (res.status === 200) {
+              }
+            })
+            .catch(err2 => handleAxiosError(err2));
         }
       })
       .catch(err => handleAxiosError(err));
@@ -76,6 +83,11 @@ const RegisterForm = () => {
         register={register}
         minLength={6}
       />
+      <div className="mt-1">
+        <Link to={PATH_HOME_FORGOT_PASSWORD} className="text-blue-500 underline text-sm">
+          Forgot password
+        </Link>
+      </div>
       <Tooltip
         title={!isSubmitting ? 'Press to login' : 'Please enter correct email and password!'}
       >
@@ -84,7 +96,7 @@ const RegisterForm = () => {
             type="submit"
             label="Submit"
             disabled={isSubmitting}
-            classNames={{ marginTop: '30px' }}
+            classNames={{ marginTop: '18px' }}
           />
         </div>
       </Tooltip>

@@ -2,8 +2,10 @@ import { Navigate } from 'react-router-dom';
 import {
   PATH_CHAT,
   PATH_HOME,
+  PATH_HOME_FORGOT_PASSWORD,
   PATH_HOME_LOGIN,
   PATH_HOME_REGISTER,
+  PATH_HOME_RESET_PASSWORD,
   PATH_HOME_VERIFY_EMAIL,
 } from './router.path';
 import { Suspense, lazy } from 'react';
@@ -56,6 +58,16 @@ export const protectedRoutes: fullRouteType[] = [
   },
   {
     path: PATH_HOME_VERIFY_EMAIL,
+    element: <Navigate to={PATH_HOME} />, //redirect to home page if already login
+    title: 'Redirect to home',
+  },
+  {
+    path: PATH_HOME_FORGOT_PASSWORD,
+    element: <Navigate to={PATH_HOME} />, //redirect to home page if already login
+    title: 'Redirect to home',
+  },
+  {
+    path: PATH_HOME_RESET_PASSWORD,
     element: <Navigate to={PATH_HOME} />, //redirect to home page if already login
     title: 'Redirect to home',
   },

@@ -1,8 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import crypto from 'crypto';
+import createHttpError from 'http-errors';
 
 import User from '../models/user.model';
-import createHttpError from 'http-errors';
+import Token from '../models/token.model';
+
 import {
   createAccessToken,
   createPayload,
@@ -10,6 +13,7 @@ import {
   isTokenExpired,
   verifyRefreshToken,
 } from '../utils/jwt';
+import sendEmail from '../utils/sendEmail';
 
 const registerUser = async (req: Request, res: Response) => {
   const { email, username, password } = req.body;
@@ -175,4 +179,120 @@ const checkRefreshToken = async (req: Request, res: Response, next: NextFunction
   return res.status(StatusCodes.OK).json({ isAuth: true });
 };
 
-export { registerUser, loginUser, refreshToken, logoutUser, checkRefreshToken };
+const forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return next(createHttpError.NotAcceptable('Email is required'));
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return next(createHttpError.NotFound('Not found user'));
+  }
+
+  const existToken = await Token.findOne({ email });
+  if (existToken) await existToken.deleteOne();
+
+  const resetToken = crypto.randomBytes(20).toString('hex');
+  const resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+  const token = await Token.create({ email, token: resetPasswordToken });
+
+  const link = `${req.headers.origin}/reset-password?e=${email}&token=${resetToken}`;
+
+  try {
+    sendEmail({
+      email,
+      title: 'Reset Password',
+      body: `<h1>Reset password request</h1>
+      <p>Hi ${user.username},\nYou requested to reset your password</p>
+      <p>Please, click the link below to reset your password</p>
+      <a href="${link}">Reset password</a>
+      <p>This link will be expired after 60 seconds</p>
+    `,
+    });
+
+    return res.status(StatusCodes.OK).json({ msg: 'Reset link has been sent to your email' });
+  } catch (error) {
+    console.log(error);
+    return next(createHttpError.InternalServerError('Something not wrong, please contact admin'));
+  }
+};
+
+const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
+  const { token: resetToken, e: email } = req.query;
+  const { password, confirmPassword } = req.body;
+
+  if (!resetToken) {
+    return next(createHttpError.NotFound('Reset token is required'));
+  }
+
+  if (!password || !confirmPassword) {
+    return next(createHttpError.NotAcceptable('Password is required'));
+  }
+
+  if (password !== confirmPassword) {
+    return next(createHttpError.NotAcceptable('Password does not match'));
+  }
+
+  const token = await Token.findOne({ email, token: resetToken });
+
+  if (!token) {
+    return next(createHttpError.NotAcceptable('Token is expired'));
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return next(createHttpError.NotFound('User not found'));
+  }
+
+  user.password = password;
+  await user.save();
+
+  sendEmail({
+    email: user.email,
+    title: 'Password Reset Successfully',
+    body: `<p>Hi ${user.username},</p>
+  <p>Your password has been changed successfully</p>`,
+  });
+
+  const payloadJWT = createPayload({
+    user_id: user._id,
+    email: user.email,
+  });
+
+  const accessToken = createAccessToken(payloadJWT, process.env.ACCESS_EXPIRES_TIME || '1h');
+  const refreshToken = createRefreshToken(payloadJWT, process.env.REFRESH_EXPIRES_TIME || '1d');
+
+  const options = {
+    expires: new Date(
+      Date.now() + (parseInt(process.env.COOKIE_EXPIRES_TIME!) || 1) * 24 * 3600 * 1000,
+    ),
+    httpOnly: true,
+    secure: true,
+  };
+
+  res.cookie('userId', user._id, {
+    expires: new Date(
+      Date.now() + (parseInt(process.env.COOKIE_EXPIRES_TIME!) || 1) * 24 * 3600 * 1000,
+    ),
+  });
+
+  return res
+    .status(StatusCodes.OK)
+    .cookie('refreshToken', refreshToken, options)
+    .json({ user, accessToken });
+};
+
+export {
+  registerUser,
+  loginUser,
+  refreshToken,
+  logoutUser,
+  checkRefreshToken,
+  forgotPassword,
+  resetPassword,
+};

@@ -19,4 +19,20 @@ const otpVerifySchema = Joi.object({
   otp: Joi.string().min(6).required(),
 });
 
-export { loginSchema, registerSchema, refreshTokenSchema, otpVerifySchema };
+const resetPasswordSchema = Joi.object({
+  password: Joi.string().min(6).required(),
+  confirmPassword: Joi.string().min(6).required(),
+});
+
+const forgotPasswordSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+
+export {
+  loginSchema,
+  registerSchema,
+  refreshTokenSchema,
+  otpVerifySchema,
+  resetPasswordSchema,
+  forgotPasswordSchema,
+};

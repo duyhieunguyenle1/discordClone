@@ -12,6 +12,9 @@ const authApi = {
     await axiosPublic.post(`/send-otp?e=${emailQuery}`, { email }),
   verifyOtp: async (otp: string, email: string) =>
     await axiosPublic.post(`/verify-otp?e=${email}`, { otp }),
+  forgotPassword: async (data: FieldValues) => await axiosPublic.post('/forgot', data),
+  resetPassword: async (data: FieldValues, token: string, email: string) =>
+    await axiosPublic.put(`/reset-password?token=${token}&e=${email}`, data),
 };
 
 export default authApi;
