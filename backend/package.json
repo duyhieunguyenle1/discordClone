@@ -4,6 +4,7 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
+    "build": "npx tsc",
     "dev": "SET NODE_ENV=DEVELOPMENT & npx nodemon",
     "prod": "SET NODE_ENV=PRODUCTION & npx nodemon",
     "lint": "eslint --ignore-path .eslintignore --ext .js,.ts",

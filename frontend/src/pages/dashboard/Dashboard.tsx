@@ -20,7 +20,7 @@ const Dashboard = () => {
     <MainContainer>
       <Header label="" />
       <Wrapper>
-        <Typography variant="h6" sx={{ color: 'white' }}>
+        <Typography variant="h6" sx={{ color: 'white', textAlign: 'center' }}>
           To start chatting - choose conversation
         </Typography>
       </Wrapper>

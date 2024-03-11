@@ -28,6 +28,7 @@ const UserSchema: Schema = new mongoose.Schema<IUser, UserModel, IUserMethods>(
       type: String,
     },
     friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    servers: [{ type: Schema.Types.ObjectId, ref: 'Server' }],
     verified: {
       type: Boolean,
       default: false,

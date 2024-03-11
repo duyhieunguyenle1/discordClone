@@ -88,12 +88,11 @@ const ResetPassword = () => {
             marginBottom: '.5rem',
           }}
         >
-          Enter the email address associated with your account and <br />
-          we'll send you a link to reset your password.
+          Enter a new password here and confirm it
         </Typography>
         <InputLabel
           id="password"
-          label="Password"
+          label="New Password"
           type="password"
           placeholder="Enter your password here"
           errors={errors}

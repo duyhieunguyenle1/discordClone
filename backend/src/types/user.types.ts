@@ -7,6 +7,7 @@ interface IUser {
   password: string;
   img?: string;
   friends: ObjectId[];
+  servers: ObjectId[];
   verified: boolean;
 }
 

@@ -1,6 +1,8 @@
-import { Button, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import FriendSidebar from './FriendSidebar';
 import GroupsIcon from '@mui/icons-material/Groups';
+import { Link } from 'react-router-dom';
+import { PATH_HOME } from '../../routes/router.path';
 
 const MainContainer = styled('div')({
   minWidth: '72px',
@@ -15,21 +17,15 @@ const Sidebar = () => {
   return (
     <>
       <MainContainer>
-        <Button
-          style={{
-            width: '48px',
-            height: '48px',
-            borderRadius: '16px',
-            margin: 0,
-            padding: 0,
-            minWidth: 0,
-            marginTop: '10px',
-            color: 'white',
-            backgroundColor: '#5865f2',
-          }}
+        <Link
+          className="bg-[#5865f2] text-white m-0 p-0 mt-[10px] rounded-2xl w-12 h-12 min-w-0 flex items-center justify-center"
+          to={PATH_HOME}
         >
           <GroupsIcon />
-        </Button>
+        </Link>
+        <div className="my-2 flex justify-center">
+          <span className="bg-[#5865f2] h-[2px] w-8 rounded-sm" />
+        </div>
       </MainContainer>
       <FriendSidebar />
     </>
