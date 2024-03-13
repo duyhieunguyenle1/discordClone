@@ -6,7 +6,7 @@ type ServerModel = Model<IServer, {}>;
 const ServerSchema: Schema = new mongoose.Schema<IServer, ServerModel>(
   {
     imgUrl: {
-      type: Text,
+      type: String,
     },
     name: {
       type: String,
@@ -20,6 +20,10 @@ const ServerSchema: Schema = new mongoose.Schema<IServer, ServerModel>(
       unique: true,
     },
     channels: [{ type: Schema.Types.ObjectId, ref: 'Channel' }],
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   { timestamps: true },
 );

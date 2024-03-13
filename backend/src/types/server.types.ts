@@ -6,6 +6,7 @@ interface IServer {
   name: string;
   imgUrl?: string;
   inviteCode: string;
+  owner: ObjectId;
 }
 
 export { IServer };

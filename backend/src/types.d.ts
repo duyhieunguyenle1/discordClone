@@ -14,3 +14,5 @@ declare module 'socket.io' {
     user: PayloadType;
   }
 }
+
+declare module 'express-async-errors';

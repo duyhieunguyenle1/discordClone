@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # Server service
+  server:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: always
+    env_file: ./.env
+    ports:
+      - ${DOCKER_API_PORT}:${DOCKER_API_PORT}
+    depends_on:
+      - db
+
+  # Client service
+  client:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - ${DOCKER_CLIENT_BUILD_PORT}:${DOCKER_CLIENT_BUILD_PORT}
+    depends_on:
+      - server
+
+  # Database service
+  db:
+    container_name: mongodb_server
+    image: mongo
+    env_file: ./.env
+    ports:
+      - 27017:${DOCKER_MONGO_PORT}
+    volumes:
+      - ./data:/data/db
+volumes:
+  data:

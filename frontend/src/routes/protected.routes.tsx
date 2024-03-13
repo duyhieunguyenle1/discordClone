@@ -7,10 +7,12 @@ import {
   PATH_HOME_REGISTER,
   PATH_HOME_RESET_PASSWORD,
   PATH_HOME_VERIFY_EMAIL,
+  PATH_SERVER,
 } from './router.path';
 import { Suspense, lazy } from 'react';
 import LoadingPage from '../components/Loading/LoadingPage';
 import { ChatPage, DashboardPage } from '../pages';
+import ServerPage from '../pages/servers/Server';
 
 const SharedLayout = lazy(() => import('../pages/sharedLayout/SharedLayout'));
 
@@ -45,9 +47,9 @@ export const protectedRoutes: fullRouteType[] = [
         title: 'Chat Details',
       },
       {
-        path: '',
-        element: <></>,
-        title: 'Contact',
+        path: PATH_SERVER,
+        element: <ServerPage />,
+        title: 'Server Details',
       },
     ],
   },

@@ -50,12 +50,6 @@
  *     responses:
  *       201:
  *         description: Register successfully.
- *         headers:
- *           Set-Cookie:
- *             description: Refresh token key is signed contain authentication information
- *             schema:
- *               type: string
- *             example: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
  *         content:
  *           application/json:
  *             schema:
@@ -213,6 +207,26 @@
  *        accessToken:
  *          type: string
  *        user:
+ *          type: object
+ *          properties:
+ *            email:
+ *             type: string
+ *            username:
+ *             type: string
+ *            password:
+ *             type: string
+ *            img:
+ *             type: string
+ *            _id:
+ *             type: string
+ *            createdAt:
+ *             type: string
+ *            updatedAt:
+ *             type: string
+ *     RegisterUserResponse:
+ *      type: object
+ *      properties:
+ *         user:
  *          type: object
  *          properties:
  *            email:

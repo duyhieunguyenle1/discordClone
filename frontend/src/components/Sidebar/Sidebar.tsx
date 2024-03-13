@@ -3,6 +3,7 @@ import FriendSidebar from './FriendSidebar';
 import GroupsIcon from '@mui/icons-material/Groups';
 import { Link } from 'react-router-dom';
 import { PATH_HOME } from '../../routes/router.path';
+import ServerSidebar from './ServerSidebar';
 
 const MainContainer = styled('div')({
   minWidth: '72px',
@@ -26,6 +27,7 @@ const Sidebar = () => {
         <div className="my-2 flex justify-center">
           <span className="bg-[#5865f2] h-[2px] w-8 rounded-sm" />
         </div>
+        <ServerSidebar />
       </MainContainer>
       <FriendSidebar />
     </>
