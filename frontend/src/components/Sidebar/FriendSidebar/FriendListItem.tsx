@@ -1,8 +1,8 @@
 import { Box, Button, Typography } from '@mui/material';
-import Avatar from '../Avatar/Avatar';
+import Avatar from '../../Avatar/Avatar';
 import { FiberManualRecord } from '@mui/icons-material';
-import { useAppSelector } from '../../stores/store';
-import { IOnlineUser } from '../../types/friend.types';
+import { useAppSelector } from '../../../stores/store';
+import { IOnlineUser } from '../../../types/friend.types';
 import { Link } from 'react-router-dom';
 
 interface FriendListItemProps {

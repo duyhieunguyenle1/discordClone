@@ -5,6 +5,9 @@ export default {
     extend: {
       colors: {
         invalidColor: '#db3c36',
+        mainColor:'#a1a6ac',
+        textMain:'#949ba4',
+        textHover:'#dbdee1'
       },
     },
   },

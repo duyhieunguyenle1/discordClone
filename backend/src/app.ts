@@ -9,8 +9,8 @@ import router from './routes';
 
 const app: Express = express();
 
-app.use(express.json());
-app.use(helmet());
+app.use(express.json({ limit: '50mb' })); //limit data transfer maximum 50mb
+app.use(helmet()); // config access, avoid xss attack
 app.use(
   cors({
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',

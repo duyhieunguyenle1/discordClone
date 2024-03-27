@@ -1,8 +1,9 @@
 import { useRoutes } from 'react-router-dom';
-import NotFoundPage from '../components/NotFound/NotFoundPage';
-import authApi from '../services/auth.services';
 import { useEffect, useState } from 'react';
+
+import NotFoundPage from '../components/NotFound/NotFoundPage';
 import LoadingPage from '../components/Loading/LoadingPage';
+import authApi from '../services/auth.services';
 import { publicRoutes } from './public.routes';
 import { protectedRoutes } from './protected.routes';
 import storage from '../utils/storage';

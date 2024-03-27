@@ -6,8 +6,11 @@ import { StatusCodes } from 'http-status-codes';
 import Server from '../models/server.model';
 import User from '../models/user.model';
 import { ObjectId } from 'mongoose';
-import { createChannelByDefault, createNewChannel } from './channel.controller';
+import { createChannelByDefault } from './channel.controller';
 import { ChannelType } from '../types/channel.types';
+
+import { v2 as cloudinary } from 'cloudinary';
+import { IServer } from '../types/server.types';
 
 const createNewServer = async (req: Request, res: Response, next: NextFunction) => {
   const { img, name } = req.body;
@@ -15,6 +18,12 @@ const createNewServer = async (req: Request, res: Response, next: NextFunction) 
 
   if (!name) {
     return next(createHttpError.NotFound('Server name is required'));
+  }
+
+  const user = await User.findOne({ _id: userId });
+
+  if (!user) {
+    return next(createHttpError.NotFound('Please login first'));
   }
 
   let inviteCode = otpGenerator.generate(8, {
@@ -35,13 +44,16 @@ const createNewServer = async (req: Request, res: Response, next: NextFunction) 
     }
   }
 
-  const server = await Server.create({ imgUrl: img, name, inviteCode, owner: userId });
+  let image: string = '';
+  if (img) {
+    const result = await cloudinary.uploader.upload(img, {
+      folder: 'discordClone',
+    });
 
-  const user = await User.findOne({ _id: userId });
-
-  if (!user) {
-    return next(createHttpError.NotFound('Please login first'));
+    image = result.secure_url;
   }
+
+  const server = await Server.create({ imgUrl: image, name, inviteCode, owner: userId });
 
   const serverId = server._id as unknown as ObjectId;
 
@@ -88,4 +100,47 @@ const getServerByCode = async (req: Request, res: Response, next: NextFunction) 
   return res.status(StatusCodes.OK).json({ server });
 };
 
-export { createNewServer, getServerByCode };
+const getServerById = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return next(createHttpError.NotFound('Id is required'));
+  }
+
+  const server = await Server.findOne({ _id: id });
+
+  if (!server) {
+    return next(createHttpError.NotFound('Not found any server'));
+  }
+
+  return res.status(StatusCodes.OK).json({ server });
+};
+
+const getAllServersOfUser = async (req: Request, res: Response, next: NextFunction) => {
+  const { userId } = req.cookies;
+
+  if (!userId) {
+    return next(createHttpError.Unauthorized('Please login to continue'));
+  }
+
+  const user = await User.findOne({ _id: userId });
+
+  if (!user) {
+    return next(createHttpError.NotFound('Not found user'));
+  }
+
+  let servers: IServer[] = [];
+  await Promise.all(
+    user.servers.map(async item => {
+      const server = await Server.findOne({ _id: item.toString() });
+
+      if (server) {
+        servers.push(server);
+      }
+    }),
+  );
+
+  return res.status(StatusCodes.OK).json({ servers });
+};
+
+export { createNewServer, getServerByCode, getAllServersOfUser, getServerById };

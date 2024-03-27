@@ -8,11 +8,11 @@ import {
   PATH_HOME_RESET_PASSWORD,
   PATH_HOME_VERIFY_EMAIL,
   PATH_SERVER,
+  PATH_SERVER_CHANNEL,
 } from './router.path';
 import { Suspense, lazy } from 'react';
 import LoadingPage from '../components/Loading/LoadingPage';
-import { ChatPage, DashboardPage } from '../pages';
-import ServerPage from '../pages/servers/Server';
+import { ChatChannelPage, ChatPage, DashboardPage, ServerCommonPage, ServerPage } from '../pages';
 
 const SharedLayout = lazy(() => import('../pages/sharedLayout/SharedLayout'));
 
@@ -20,6 +20,7 @@ interface routeType {
   path: string;
   title: string;
   element: JSX.Element;
+  children?: routeType[];
 }
 
 type fullRouteType = routeType & {
@@ -50,6 +51,18 @@ export const protectedRoutes: fullRouteType[] = [
         path: PATH_SERVER,
         element: <ServerPage />,
         title: 'Server Details',
+        children: [
+          {
+            path: '',
+            element: <ServerCommonPage />,
+            title: 'Server Page Common',
+          },
+          {
+            path: PATH_SERVER_CHANNEL,
+            element: <ChatChannelPage />,
+            title: 'Server Channel',
+          },
+        ],
       },
     ],
   },

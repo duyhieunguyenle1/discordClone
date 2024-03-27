@@ -1,12 +1,25 @@
 import express from 'express';
 
 import { authenticatedUser } from '../middleware/authentication.middlewares';
-import { getAllUsers, getCurrentUser, getUserById } from '../controllers/user.controller';
+import {
+  getAllFriendsNotInServer,
+  getAllUsers,
+  getCurrentUser,
+  getUserById,
+} from '../controllers/user.controller';
+import Validator from '../middleware/Validator';
+import { getAllFriendsSchema } from '../validators/user.validators';
 
-const route = express.Router();
+const router = express.Router();
 
-route.get('/get-users', authenticatedUser, getAllUsers);
-route.get('/current-user', authenticatedUser, getCurrentUser);
-route.get('/get-user/:id', authenticatedUser, getUserById);
+router.get('/get-users', authenticatedUser, getAllUsers);
+router.get('/current-user', authenticatedUser, getCurrentUser);
+router.get('/get-user/:id', authenticatedUser, getUserById);
+router.post(
+  '/getFriends-notInServer',
+  authenticatedUser,
+  Validator(getAllFriendsSchema),
+  getAllFriendsNotInServer,
+);
 
-export default route;
+export default router;

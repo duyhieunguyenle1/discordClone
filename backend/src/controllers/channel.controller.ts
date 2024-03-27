@@ -1,13 +1,14 @@
 import { NextFunction, Response, Request } from 'express';
 import createHttpError from 'http-errors';
-
-import Channel from '../models/channel.model';
 import { StatusCodes } from 'http-status-codes';
-import { ChannelType } from '../types/channel.types';
+
+import { ChannelType, IChannel } from '../types/channel.types';
+import Channel from '../models/channel.model';
+import Server from '../models/server.model';
 
 const createNewChannel = async (req: Request, res: Response, next: NextFunction) => {
   const { name, type } = req.body;
-  const serverId = req.params.id;
+  const { id: serverId } = req.params;
 
   if (!name) {
     return next(createHttpError.Unauthorized('Please enter your channel name to continue'));
@@ -32,4 +33,51 @@ const createChannelByDefault = async (type: ChannelType, serverId: string, next:
   return channel._id;
 };
 
-export { createNewChannel, createChannelByDefault };
+const getAllChannelsOfServer = async (req: Request, res: Response, next: NextFunction) => {
+  const { id: serverId } = req.params;
+
+  if (!serverId) {
+    return next(createHttpError.NotAcceptable('You must be in a server route'));
+  }
+
+  const server = await Server.findOne({ _id: serverId });
+
+  if (!server) {
+    return next(createHttpError.NotFound('Server not found'));
+  }
+
+  let channels: IChannel[] = [];
+  await Promise.all(
+    server.channels.map(async channelId => {
+      const channel = await Channel.findOne({ _id: channelId.toString() });
+
+      if (channel) {
+        channels.push(channel);
+      }
+    }),
+  );
+
+  return res.status(StatusCodes.OK).json({ channels });
+};
+
+const getChannelOfServer = async (req: Request, res: Response, next: NextFunction) => {
+  const { id1: serverId, id2: channelId } = req.params;
+
+  if (!serverId) {
+    return next(createHttpError.NotFound('Server id is required'));
+  }
+
+  if (!channelId) {
+    return next(createHttpError.NotFound('Channel id is required'));
+  }
+
+  const channel = await Channel.findOne({ _id: channelId, server: serverId });
+
+  if (!channel) {
+    return next(createHttpError.NotFound('Channel is not existed'));
+  }
+
+  return res.status(StatusCodes.OK).json({ channel });
+};
+
+export { createNewChannel, createChannelByDefault, getAllChannelsOfServer, getChannelOfServer };

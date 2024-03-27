@@ -1,5 +1,5 @@
 import { styled } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+import ChannelChatContainer from '../../modules/ChannelChat/ChannelChatContainer';
 
 const MainContainer = styled('div')({
   flexGrow: 1,
@@ -8,12 +8,12 @@ const MainContainer = styled('div')({
   display: 'flex',
 });
 
-const ServerPage = () => {
+const ChatChannel = () => {
   return (
     <MainContainer>
-      <Outlet />
+      <ChannelChatContainer />
     </MainContainer>
   );
 };
 
-export default ServerPage;
+export default ChatChannel;

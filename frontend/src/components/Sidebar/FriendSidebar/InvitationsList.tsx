@@ -1,6 +1,6 @@
 import { Typography, styled } from '@mui/material';
 import InvitationListItem from './InvitationListItem';
-import { useAppSelector } from '../../stores/store';
+import { useAppSelector } from '../../../stores/store';
 
 const MainContainer = styled('div')({
   display: 'flex',

@@ -11,7 +11,7 @@ const MainContainer = styled('div')({
   position: 'absolute',
   right: '0',
   top: '0',
-  height: '48px',
+  height: '49px',
   borderBottom: '1px solid black',
   backgroundColor: '#36393f',
   width: 'calc(100% - 296px)',

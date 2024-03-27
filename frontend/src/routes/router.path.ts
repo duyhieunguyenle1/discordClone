@@ -5,4 +5,5 @@ export const PATH_HOME_REGISTER = '/register';
 export const PATH_CHAT = '/chat/:id';
 export const PATH_HOME_FORGOT_PASSWORD = '/forgot';
 export const PATH_HOME_RESET_PASSWORD = '/reset-password';
-export const PATH_SERVER = 'server/:id';
+export const PATH_SERVER = '/server/:id';
+export const PATH_SERVER_CHANNEL = '/server/:id/:channelId';

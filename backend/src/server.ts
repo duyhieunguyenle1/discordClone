@@ -1,12 +1,12 @@
 import { createServer } from 'http';
-import dotenv from 'dotenv';
+import { v2 as cloudinary } from 'cloudinary';
 
 import { registerSocketServer } from './socketServer';
 import app from './app';
 import connectDB from './config/connectDB';
-dotenv.config();
+import config from './config';
 
-const PORT = process.env.PORT || process.env.API_PORT || 5001;
+const PORT = config.development.api_port;
 
 const server = createServer(app);
 registerSocketServer(server);
@@ -17,9 +17,16 @@ process.on('uncaughtException', err => {
   process.exit(1);
 });
 
+// Setting up cloudinary configuration
+cloudinary.config({
+  cloud_name: config.cloudinary.cloudinary_name,
+  api_key: config.cloudinary.cloudinary_key,
+  api_secret: config.cloudinary.cloudinary_secret,
+});
+
 const start = async () => {
   try {
-    await connectDB(process.env.DATABASE_URL!);
+    await connectDB(config.database.database_url!);
     server.listen(PORT, () => {
       console.log(`Server is listening on ${PORT}`);
     });

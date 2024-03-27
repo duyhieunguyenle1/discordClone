@@ -62,7 +62,7 @@ const ChatContent = ({ user }: { user: IUser }) => {
           This is the beginning of your conversation with {user?.username}
         </Typography>
       </HeaderContainer>
-      <div className="flex-1 w-[98%]">
+      <div className="flex-1 w-[98%] overflow-y-auto">
         {messages.map((message, index) => {
           const sameAuthor =
             index > 0 && messages[index].author._id === messages[index - 1].author._id;

@@ -6,6 +6,7 @@ import AuthRoutes from './auth.routes';
 import UserRoutes from './user.routes';
 import FriendRoutes from './friend.routes';
 import ServerRoutes from './server.routes';
+import ChannelRoutes from './channel.routes';
 import options from '../docs';
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.use('/user', UserRoutes);
 router.use('/auth', AuthRoutes);
 router.use('/friend', FriendRoutes);
 router.use('/server', ServerRoutes);
+router.use('/channel', ChannelRoutes);
 
 export default router;

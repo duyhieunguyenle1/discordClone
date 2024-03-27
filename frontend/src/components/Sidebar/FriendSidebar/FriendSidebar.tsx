@@ -6,14 +6,14 @@ import {
   Typography,
   styled,
 } from '@mui/material';
-import PrimaryButton from '../Button/PrimaryButton';
+import PrimaryButton from '../../Button/PrimaryButton';
 import FriendList from './FriendList';
 import InvitationsList from './InvitationsList';
 import { useState } from 'react';
-import InputLabel from '../InputLabel/InputLabel';
+import InputLabel from '../../InputLabel/InputLabel';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import { useAppDispatch } from '../../stores/store';
-import { sendFriendInvitation } from '../../stores/friendInvitation/friendInvitationThunk';
+import { useAppDispatch } from '../../../stores/store';
+import { sendFriendInvitation } from '../../../stores/friendInvitation/friendInvitationThunk';
 import { toast } from 'react-toastify';
 
 const MainContainer = styled('div')({

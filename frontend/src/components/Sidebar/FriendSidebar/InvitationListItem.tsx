@@ -2,12 +2,12 @@ import { Box, IconButton, Tooltip, Typography } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 
-import Avatar from '../Avatar/Avatar';
-import { useAppDispatch } from '../../stores/store';
+import Avatar from '../../Avatar/Avatar';
+import { useAppDispatch } from '../../../stores/store';
 import {
   acceptFriendInvitation,
   rejectFriendInvitation,
-} from '../../stores/friendInvitation/friendInvitationThunk';
+} from '../../../stores/friendInvitation/friendInvitationThunk';
 import { toast } from 'react-toastify';
 
 interface InvitationListItemProps {

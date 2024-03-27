@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import config from '../config';
 
 interface sendEmailProps {
   email: string;
@@ -9,15 +10,15 @@ interface sendEmailProps {
 const sendEmail = async ({ email, title, body }: sendEmailProps) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
+      host: config.nodemailer.smtp_host,
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
+        user: config.nodemailer.smtp_user,
+        pass: config.nodemailer.smtp_password,
       },
     });
 
     const info = await transporter.sendMail({
-      from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_EMAIL}>`,
+      from: `${config.nodemailer.smtp_name} <${config.nodemailer.smtp_email}>`,
       to: email,
       subject: title,
       html: body,

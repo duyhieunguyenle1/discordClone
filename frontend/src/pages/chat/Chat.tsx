@@ -8,7 +8,7 @@ const MainContainer = styled('div')({
   display: 'flex',
 });
 
-const Dashboard = () => {
+const ChatPage = () => {
   return (
     <MainContainer>
       <ChatDetails />
@@ -16,4 +16,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default ChatPage;

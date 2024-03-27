@@ -1,8 +1,8 @@
 import Joi from 'joi';
 
 const createServerSchema = Joi.object({
-  name: Joi.string().required(),
-  img: Joi.string(),
+  name: Joi.string().min(6).required(),
+  img: Joi.string().allow(''),
 });
 
 const getServerByCodeSchema = Joi.object({

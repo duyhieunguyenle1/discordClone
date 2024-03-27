@@ -16,7 +16,7 @@ const socketPort = import.meta.env.VITE_DOMAIN_SOCKET;
 
 type dispatchProps = Dispatch<UnknownAction> & ThunkDispatch<any, undefined, UnknownAction>;
 
-let socket: Socket;
+export let socket: Socket;
 
 export const connectSocket = async (dispatch: dispatchProps) => {
   let token = storage.getAccessToken();

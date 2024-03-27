@@ -1,10 +1,11 @@
 import { Typography, styled } from '@mui/material';
 import FriendListItem from './FriendListItem';
-import { useAppSelector } from '../../stores/store';
+import { useAppSelector } from '../../../stores/store';
 
 const MainContainer = styled('div')({
   flexGrow: 1,
   width: '100%',
+  overflowY: 'auto',
 });
 
 const FriendList = () => {
